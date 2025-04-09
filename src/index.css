@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
 *{
-  padding: 0;
-  box-sizing: border-box;
-  margin: 0;
+  font-family: 'Itim',cursive;
+}
+
+@theme{
+  --color-primary:#F8A900;
+  --color-gray-gradient-start:#F0F0F0;
+  --color-gray-gradient-end:#000;
 }
