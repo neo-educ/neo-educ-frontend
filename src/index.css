@@ -1,11 +1,11 @@
 @import "tailwindcss";
+@import "@flaticon/flaticon-uicons/css/all/all";
+@plugin "daisyui";
 
 *{
   font-family: 'Itim',cursive;
 }
 
 @theme{
-  --color-primary:#F8A900;
-  --color-gray-gradient-start:#F0F0F0;
-  --color-gray-gradient-end:#000;
+  --color-ne_primary:#F8A900;
 }
