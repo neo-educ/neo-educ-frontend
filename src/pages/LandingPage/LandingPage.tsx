@@ -38,7 +38,7 @@ const LandingPage = () => {
   return (
     <>
     <HomeNavBar />
-    <main className="p-10 flex flex-col relative min-w-screen min-h-screen bg-gradient-to-t from-gray-50 to-gray-200">
+    <main className="p-10 flex flex-col relative min-w-screen min-h-screen ">
       <section className="w-full min-h-[90vh] flex items-center justify-center  ">
         <div className="flex flex-col items-center">
           <h1 className="text-6xl text-ne_primary text-center">
