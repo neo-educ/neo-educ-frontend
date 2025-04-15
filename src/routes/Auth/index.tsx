@@ -6,11 +6,11 @@ const routesConfig: {
   Component: React.ComponentType;
   key: string;
 }[] = [
-    {
-        path: "/auth/login",
-        Component: Login,
-        key: "login",
-    },
+  {
+    path: "/auth/login",
+    Component: Login,
+    key: "login",
+  },
   {
     path: "/auth/signup",
     Component: Signup,

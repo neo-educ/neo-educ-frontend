@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { AiOutlineLoading } from "react-icons/ai";
 import { z } from "zod";
 import { useLoginController } from "./LoginController";
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido"),
-  password: z.string().min(2, "Senha deve ter pelo menos 6 caracteres"),
+  password: z.string(),
 });
 
 const Login = () => {
@@ -17,7 +18,7 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const { onSubmit,loading } = useLoginController();
+  const { onSubmit, loading } = useLoginController();
 
   const handleSubmitForm = (data: { email: string; password: string }) => {
     onSubmit(data);
@@ -55,9 +56,13 @@ const Login = () => {
             </span>
           )}
         </div>
-          
-        <button type="submit" className="btn bg-ne_primary w-1/4 rounded" disabled={loading}>
-          {loading?"Carregando...":"Login"}
+
+        <button
+          type="submit"
+          className="btn bg-ne_primary w-1/4 rounded"
+          disabled={loading}
+        >
+          {loading ? <AiOutlineLoading className="spinner" /> : "Login"}
         </button>
       </form>
       <div className="flex flex-col items-center mt-10">

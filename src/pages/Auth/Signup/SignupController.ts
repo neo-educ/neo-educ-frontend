@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import api from "../../../config/axios";
 import { SignupData, signupSchema } from "./SignupUtils";
@@ -7,6 +8,7 @@ import { SignupData, signupSchema } from "./SignupUtils";
 
 export const useSignupController = () => {
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
     const onSignup = async (data: SignupData) => {
         try {
             setLoading(true);
@@ -17,7 +19,7 @@ export const useSignupController = () => {
             if (response.status === 200) {
                 toast.success("Cadastro realizado com sucesso!");
                 setTimeout(() => {
-                    window.location.href = "/auth/login";
+                  navigate("/auth/login");
                 }, 2000);
             } else {
                 toast.error(response.data.message || "Erro ao cadastrar usuário!");
