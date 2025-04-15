@@ -1,5 +1,6 @@
 import { Route } from "react-router-dom";
 import Login from "../../pages/Auth/Login/Login";
+import Signup from "../../pages/Auth/Signup/Signup";
 const routesConfig: {
   path: string;
   Component: React.ComponentType;
@@ -10,11 +11,11 @@ const routesConfig: {
         Component: Login,
         key: "login",
     },
-//   {
-//     path: "/auth/register",
-//     Component: ,
-//     key: "register",
-//   },
+  {
+    path: "/auth/signup",
+    Component: Signup,
+    key: "signup",
+  },
 ];
 
 export const routes = routesConfig.map(({ path, Component, key }) => (

@@ -17,7 +17,7 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const { onSubmit,loading,error } = useLoginController();
+  const { onSubmit,loading } = useLoginController();
 
   const handleSubmitForm = (data: { email: string; password: string }) => {
     onSubmit(data);
@@ -55,11 +55,17 @@ const Login = () => {
             </span>
           )}
         </div>
-
+          
         <button type="submit" className="btn bg-ne_primary w-1/4 rounded" disabled={loading}>
           {loading?"Carregando...":"Login"}
         </button>
       </form>
+      <div className="flex flex-col items-center mt-10">
+        <span className="">Não tem uma conta?</span>
+        <a href="/auth/signup" className="text-ne_primary underline">
+          Crie uma agora
+        </a>
+      </div>
     </main>
   );
 };

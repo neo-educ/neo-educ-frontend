@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@flaticon/flaticon-uicons/css/all/all";
 @plugin "daisyui";
 
 *{
@@ -8,4 +7,17 @@
 
 @theme{
   --color-ne_primary:#F8A900;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
