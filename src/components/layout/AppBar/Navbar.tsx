@@ -1,6 +1,8 @@
 import { BiChevronDown } from "react-icons/bi";
 import { FaDoorOpen, FaGear } from "react-icons/fa6";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
+import Menu from "./Menu/Menu";
+import { menuItems } from "./menuPaths";
 
 
 const Navbar = () => {
@@ -10,6 +12,11 @@ const Navbar = () => {
     <div className="navbar bg-base-200">
       <div className="ps-4">
         <a className="text-3xl font-bold">NeoEduc</a>
+      </div>
+      <div>
+      <Menu 
+        items={menuItems} 
+      />
       </div>
       <div className="flex grow justify-end px-2">
         <div className="flex items-stretch">
