@@ -7,36 +7,6 @@ import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../config/axios";
 import toast from "react-hot-toast";
 
-const samplePlans: ClassPlan[] = [
-  {
-    id: 1,
-    topic: "Introduction to React",
-    classDate: "2024-03-20T14:30:00",
-    inputData: "Basic React concepts and component lifecycle",
-    aiGeneratedContent:
-      "Comprehensive lesson plan covering React fundamentals, JSX, and component state management",
-    status: "PUBLISHED",
-  },
-  {
-    id: 2,
-    topic: "Advanced TypeScript",
-    classDate: "2024-03-22T15:00:00",
-    inputData: "Generic types and advanced type inference",
-    aiGeneratedContent:
-      "Detailed exploration of TypeScript's type system and practical applications",
-    status: "DRAFT",
-  },
-  {
-    id: 3,
-    topic: "CSS Grid Layout",
-    classDate: "2024-03-18T13:00:00",
-    inputData: "Modern CSS layout techniques",
-    aiGeneratedContent:
-      "Interactive exercises demonstrating CSS Grid concepts and responsive design patterns",
-    status: "ARCHIVED",
-  },
-];
-
 const ClassPlansPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setSelectedPlan] = useState<ClassPlan | null>(null);
