@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import ClassPlansTable from "./components/ClassPlansTable";
 import CreateClassPlanModal from "./components/modal/ClassPlansCreateModal";
+import UpdateClassPlanModal from "./components/modal/ClassPlansUpdateModal";
 import { ClassPlan, ClassPlanCreate } from "./types";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../config/axios";
@@ -9,41 +10,78 @@ import toast from "react-hot-toast";
 
 const ClassPlansPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [, setSelectedPlan] = useState<ClassPlan | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<ClassPlan | null>(null);
   const { user } = useAuth();
   const [classPlans, setClassPlans] = useState<ClassPlan[]>([]);
 
-  const fetchClassPlans = async() => {
+  const fetchClassPlans = async () => {
     const response = await api.get("class-plans");
     if (response.status === 200) {
       setClassPlans(response.data);
-    }else {
-      toast.error(response.data.message || "Erro ao criar plano de aula");
+    } else {
+      toast.error(response.data.message || "Erro ao buscar planos de aula");
     }
-  } 
+  };
+
   useEffect(() => {
-    fetchClassPlans()
-  },[])
- 
+    fetchClassPlans();
+  }, []);
 
   const handleCreatePlan = async (data: ClassPlanCreate) => {
     const response = await api.post("class-plans", data);
     if (response.status === 200) {
-      toast("Plano de aula criado com sucesso!");
-    }else {
+      toast.success("Plano de aula criado com sucesso!");
+      await fetchClassPlans();
+    } else {
       toast.error(response.data.message || "Erro ao criar plano de aula");
     }
   };
+
+  const handleUpdatePlan = async (data: ClassPlanCreate) => {
+    if (!selectedPlan) return;
+  
+    try {
+      const response = await api.put(
+        `class-plans/update/${selectedPlan.id}`,
+        {
+          topic: data.topic,
+          classDate: data.classDate,
+          inputData: data.inputData
+        },
+        {
+          headers: {
+            "Content-Type": "application/json" 
+          }
+        }
+      );
+  
+      if (response.status === 200) {
+        toast.success("Plano de aula atualizado com sucesso!");
+        await fetchClassPlans();
+      } else {
+        toast.error(response.data.message || "Erro ao atualizar plano de aula");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao fazer requisição para atualizar plano de aula");
+    }
+  };
+  
 
   const handleEditPlan = (plan: ClassPlan) => {
     setSelectedPlan(plan);
     setIsModalOpen(true);
   };
 
-  const handleDeletePlan = (planId: number) => {
-    if (window.confirm("Are you sure you want to delete this class plan?")) {
-      console.log("Deleting plan:", planId);
-
+  const handleDeletePlan = async (planId: number) => {
+    if (window.confirm("Tem certeza que quer deletar esse plano de aula?")) {
+      const response = await api.delete(`class-plans/${planId}`);
+      if (response.status === 200) {
+        toast.success("Plano de aula deletado com sucesso!");
+        await fetchClassPlans();
+      } else {
+        toast.error(response.data.message || "Não foi possível deletar o plano de aula");
+      }
     }
   };
 
@@ -52,9 +90,7 @@ const ClassPlansPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Seus Planos de Aulas
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900">Seus Planos de Aulas</h1>
             <p className="mt-2 text-sm text-gray-700">
               Gerencie e visualize todos os seus planos de aula em um só lugar
             </p>
@@ -75,15 +111,35 @@ const ClassPlansPage: React.FC = () => {
           onEdit={handleEditPlan}
           onDelete={handleDeletePlan}
         />
-        <CreateClassPlanModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedPlan(null);
-          }}
-          onSubmit={handleCreatePlan}
-          teacherEmail={user?.email || ""}
-        />
+
+        {!selectedPlan && (
+          <CreateClassPlanModal
+            isOpen={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedPlan(null);
+            }}
+            onSubmit={handleCreatePlan}
+            teacherEmail={user?.email || ""}
+          />
+        )}
+
+        {selectedPlan && (
+          <UpdateClassPlanModal
+            isOpen={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedPlan(null);
+            }}
+            onSubmit={handleUpdatePlan}
+            initialData={{
+              topic: selectedPlan.topic,
+              classDate: new Date(selectedPlan.classDate),
+              inputData: selectedPlan.inputData,
+              teacher_email: user?.email || "",
+            }}
+          />
+        )}
       </div>
     </div>
   );

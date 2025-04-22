@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ClassPlanCreate } from '../../types';
 
-interface CreateClassPlanModalProps {
+interface UpdateClassPlanModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: ClassPlanCreate) => void;
-  teacherEmail: string;
+  initialData: ClassPlanCreate;
 }
 
-const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
+const UpdateClassPlanModal: React.FC<UpdateClassPlanModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  teacherEmail
+  initialData
 }) => {
-  const [formData, setFormData] = useState<ClassPlanCreate>({
-    topic: '',
-    classDate: new Date(),
-    inputData: '',
-    teacher_email: teacherEmail
-  });
+  const [formData, setFormData] = useState<ClassPlanCreate>(initialData);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(initialData);
+    }
+  }, [isOpen, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-full max-w-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">Criar Plano de Aula</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Atualizar Plano de Aula</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500 transition-colors"
@@ -65,7 +66,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
               Data da aula
             </label>
             <DatePicker
-              selected={formData.classDate}
+              selected={new Date(formData.classDate)}
               onChange={(date) => setFormData({ ...formData, classDate: date || new Date() })}
               showTimeSelect
               dateFormat="MMMM d, yyyy h:mm aa"
@@ -99,7 +100,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             >
-              Criar aula
+              Atualizar aula
             </button>
           </div>
         </form>
@@ -108,4 +109,4 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
   );
 };
 
-export default CreateClassPlanModal;
+export default UpdateClassPlanModal;
