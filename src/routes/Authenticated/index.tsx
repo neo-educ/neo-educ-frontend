@@ -1,6 +1,7 @@
 import { Route } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/layout/AppBar/Navbar";
 import Home from "../../pages/Authenticated/Home/Home";
+import ClassPlansPage from "../../pages/Authenticated/ClassPlan/page";
 const routesConfig: {
   path: string;
   Component: React.ComponentType;
@@ -11,6 +12,11 @@ const routesConfig: {
     Component: Home,
     key: "login",
   },
+  {
+    path: "/planos-de-aulas",
+    Component: ClassPlansPage,
+    key: "Planos",
+  }
 ];
 
 export const routes = routesConfig.map(({ path, Component, key }) => (
