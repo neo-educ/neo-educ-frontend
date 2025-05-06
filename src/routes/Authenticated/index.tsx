@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
 import Navbar from "../../components/layout/AppBar/Navbar";
-import Home from "../../pages/Authenticated/Home/Home";
 import ClassPlansPage from "../../pages/Authenticated/ClassPlan/page";
+import Home from "../../pages/Authenticated/Home/Home";
 const routesConfig: {
   path: string;
   Component: React.ComponentType;
