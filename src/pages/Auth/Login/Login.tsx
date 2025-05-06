@@ -24,31 +24,35 @@ const Login = () => {
     onSubmit(data);
   };
   return (
-    <main className="min-h-screen p-10 flex flex-col items-center pt-24">
-      <h1 className="text-5xl  text-ne_primary">NeoEduc</h1>
-      <h2 className="text-5xl mb-4">Aproveite nossa plataforma</h2>
+    <main className="min-h-screen p-10 flex flex-col items-center pt-24 bg-gray-100">
+      <h1 className="text-5xl font-bold text-ne_primary mb-2">NeoEduc</h1>
+      <h2 className="text-2xl text-gray-600 mb-8">Aproveite nossa plataforma</h2>
       <form
         onSubmit={handleSubmit(handleSubmitForm)}
-        className="flex flex-col items-center gap-4 w-1/2 mx-auto mt-20 p-8 bg-white rounded-2xl shadow-lg"
+        className="flex flex-col items-center justify-center gap-6 w-full max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg"
       >
-        <h2 className="text-4xl">Entrar</h2>
-        <div className="flex flex-col gap-1 w-1/2 ">
+        <h2 className="text-3xl font-semibold mb-4">Entrar</h2>
+        <div className="flex flex-col gap-2 w-full">
           <input
             type="email"
             placeholder="Email"
             {...register("email")}
-            className={` input ${errors.email ? "input-error" : ""}`}
+            className={`input w-full px-4 py-2 border rounded-md ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            }`}
           />
           {errors.email && (
             <span className="text-red-500 text-sm">{errors.email.message}</span>
           )}
         </div>
-        <div className="flex flex-col gap-1 w-1/2 ">
+        <div className="flex flex-col gap-2 w-full">
           <input
             type="password"
             placeholder="Senha"
             {...register("password")}
-            className={`input ${errors.password ? "input-error" : ""}`}
+            className={`input w-full px-4 py-2 border rounded-md ${
+              errors.password ? "border-red-500" : "border-gray-300"
+            }`}
           />
           {errors.password && (
             <span className="text-red-500 text-sm">
@@ -59,15 +63,15 @@ const Login = () => {
 
         <button
           type="submit"
-          className="btn bg-ne_primary w-1/4 rounded"
+          className="btn bg-ne_primary text-white w-full py-2 rounded-md hover:bg-ne_primary-dark transition disabled:opacity-50"
           disabled={loading}
         >
           {loading ? <AiOutlineLoading className="spinner" /> : "Login"}
         </button>
       </form>
-      <div className="flex flex-col items-center mt-10">
-        <span className="">Não tem uma conta?</span>
-        <a href="/auth/signup" className="text-ne_primary underline">
+      <div className="flex flex-col items-center mt-6">
+        <span className="text-gray-600">Não tem uma conta?</span>
+        <a href="/auth/signup" className="text-ne_primary underline mt-1">
           Crie uma agora
         </a>
       </div>
