@@ -1,7 +1,7 @@
 import { MenuItemType } from "./Menu/types"
-import { Home, BookCheck} from 'lucide-react';
+import { Home, BookCheck, BookA} from 'lucide-react';
 
-export  const menuItems: MenuItemType[] = [
+export const menuItems: MenuItemType[] = [
   {
     label: 'Home',
     href: '/home',
@@ -12,5 +12,10 @@ export  const menuItems: MenuItemType[] = [
     label: 'Planos de Aulas',
     href: '/planos-de-aulas',
     icon: <BookCheck size={16} />
+  },
+  {
+    label: 'Geração de materiais',
+    href: '/geracao-de-materiais',
+    icon: <BookA size={16} />
   }
 ]
