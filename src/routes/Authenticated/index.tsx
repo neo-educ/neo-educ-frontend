@@ -2,6 +2,7 @@ import { Route } from "react-router-dom";
 import Navbar from "../../components/layout/AppBar/Navbar";
 import ClassPlansPage from "../../pages/Authenticated/ClassPlan/page";
 import Home from "../../pages/Authenticated/Home/Home";
+import { PageMaterialGeneration } from "../../pages/Authenticated/materialGeneration/page";
 const routesConfig: {
   path: string;
   Component: React.ComponentType;
@@ -16,6 +17,11 @@ const routesConfig: {
     path: "/planos-de-aulas",
     Component: ClassPlansPage,
     key: "Planos",
+  },
+  {
+    path: "/geracao-de-materiais",
+    Component: PageMaterialGeneration,
+    key: "GeracaoDeMateriais",
   }
 ];
 
