@@ -7,6 +7,7 @@ interface User {
   lastName: string;
   email: string;
   phone: string;
+  inviteCode: string;
 }
 
 interface AuthResponse {
@@ -15,6 +16,7 @@ interface AuthResponse {
         last_name: string;
         email: string;
         phone: string;
+        invite_token: string;
     }
     token: string;
     expiresIn: number;
@@ -54,6 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         lastName: user.last_name,
         email: user.email,
         phone: user.phone,
+        inviteCode: user.invite_token
     });
     Cookies.set("token", token, {
       expires: new Date(Date.now() + expiresIn * 1000),

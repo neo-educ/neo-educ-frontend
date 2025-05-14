@@ -1,0 +1,286 @@
+import { useState } from "react";
+import api from "../../../config/axios";
+import GeneratedActivity from "./GeneratedActivity";
+import { Student } from "./types";
+
+interface Props {
+  selectedStudent: Student;
+  handleReturn: () => void;
+}
+
+const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
+  const [formData, setFormData] = useState({
+    subject: "",
+    level: "",
+    studentLevel: true,
+    studentInterests: true,
+  });
+
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = {
+      studentId: selectedStudent.id,
+      subject: formData.subject,
+      setLevel: formData.studentLevel ? null : formData.level,
+      level: formData.studentLevel,
+      interests: formData.studentInterests,
+    };
+    try {
+      setLoading(true);
+      const response = await api.post("/api/materiais/activity", body);
+      const generatedResponse = response.data;
+      setResponse(generatedResponse as string);
+      openGeneratedActivityModal();
+    } catch (error) {
+      console.error("Error generating activity:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openGeneratedActivityModal = () => {
+    const modal = document.getElementById(
+      "activity-modal"
+    ) as HTMLDialogElement;
+
+    console.log(modal);
+
+    if (modal) {
+      modal.showModal();
+    }
+  };
+
+  return (
+    <div className="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2">
+      <h3 className="text-xl font-regular">{selectedStudent.name}</h3>
+      <div>
+        <p className="text-gray-600">{selectedStudent.email}</p>
+        <p className="text-gray-600">
+          Nível de Proficiência: {selectedStudent.proficiencyLevel}
+        </p>
+        <p className="text-gray-600">
+          Criado em: {new Date(selectedStudent.createdAt).toLocaleDateString()}
+        </p>
+        <div className="bg-gray-100 p-2 rounded-md mt-2">
+          <div className="tabs tabs-lift">
+            <input
+              type="radio"
+              name="my_tabs_2"
+              className="tab"
+              aria-label="Nova Atividade"
+              defaultChecked
+            />
+            <div className="tab-content border-base-300 bg-base-100 p-4">
+              <form className="flex flex-col gap-4 " onSubmit={handleSubmit}>
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block text-gray-700 font-medium"
+                  >
+                    Assunto
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    value={formData.subject}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subject: e.target.value })
+                    }
+                    required
+                    className="input input-bordered w-full"
+                    placeholder="Digite o assunto"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="level"
+                    className="block text-gray-700 font-medium"
+                  >
+                    Nível
+                  </label>
+                  <select
+                    id="level"
+                    className="select select-bordered w-full"
+                    disabled={formData.studentLevel}
+                  >
+                    <option value="" disabled>
+                      Selecione o nível
+                    </option>
+                    <option value="beginner">Iniciante</option>
+                    <option value="intermediate">Intermediário</option>
+                    <option value="advanced">Avançado</option>
+                  </select>
+                </div>
+                <div>
+                  <span className="block text-gray-700 font-medium">
+                    Configurações
+                  </span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      id="student-level"
+                      checked={formData.studentLevel}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          studentLevel: e.target.checked,
+                        })
+                      }
+                      className="checkbox"
+                    />
+                    <label htmlFor="student-level" className="text-gray-600">
+                      Deixar no nível do aluno
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <input
+                      type="checkbox"
+                      id="student-interests"
+                      className="checkbox"
+                      checked={formData.studentInterests}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          studentInterests: e.target.checked,
+                        })
+                      }
+                    />
+                    <label
+                      htmlFor="student-interests"
+                      className="text-gray-600"
+                    >
+                      Basear nos interesses do aluno
+                    </label>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn disabled:opacity-1/2 bg-blue-500 text-white font-medium rounded-md mt-4"
+                >
+                  {loading ? (
+                    <span className="loading loading-spinner"></span>
+                  ) : (
+                    "Criar Atividade"
+                  )}
+                </button>
+              </form>
+            </div>
+
+            <input
+              type="radio"
+              name="my_tabs_2"
+              className="tab"
+              aria-label="Histórico de Atividades"
+            />
+            <div className="tab-content border-base-300 bg-base-100 p-4">
+              <div className="overflow-x-auto">
+                <table className="table w-full">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Id Atividade</th>
+                      <th>Status</th>
+                      <th>Nota</th>
+                    </tr>
+                  </thead>
+                  <tbody>{/* Existing activity history rows */}</tbody>
+                </table>
+              </div>
+              <form className="flex flex-col gap-4 mt-4">
+                <div>
+                  <label
+                    htmlFor="activity-date"
+                    className="block text-gray-700 font-medium"
+                  >
+                    Data
+                  </label>
+                  <input
+                    type="date"
+                    id="activity-date"
+                    className="input input-bordered w-full"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="activity-id"
+                    className="block text-gray-700 font-medium"
+                  >
+                    Id Atividade
+                  </label>
+                  <input
+                    type="text"
+                    id="activity-id"
+                    className="input input-bordered w-full"
+                    placeholder="Digite o ID da atividade"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="activity-status"
+                    className="block text-gray-700 font-medium"
+                  >
+                    Status
+                  </label>
+                  <select
+                    id="activity-status"
+                    className="select select-bordered w-full"
+                  >
+                    <option value="completed">Concluído</option>
+                    <option value="pending">Pendente</option>
+                    <option value="failed">Falhou</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="activity-grade"
+                    className="block text-gray-700 font-medium"
+                  >
+                    Nota
+                  </label>
+                  <input
+                    type="number"
+                    id="activity-grade"
+                    className="input input-bordered w-full"
+                    placeholder="Digite a nota"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn bg-blue-500 text-white font-medium rounded-md mt-4"
+                >
+                  Adicionar Histórico
+                </button>
+              </form>
+            </div>
+
+            <input
+              type="radio"
+              name="my_tabs_2"
+              className="tab"
+              aria-label="Relatório de Progresso"
+            />
+            <div className="tab-content border-base-300 bg-base-100 p-4">
+              Relatório de Progresso
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={handleReturn}
+          className="btn bg-ne_primary bg-blue-500 font-thin text-white p-2 rounded-md self-end"
+        >
+          Voltar
+        </button>
+      </div>
+      <GeneratedActivity activityResponse={response} />
+    </div>
+  );
+};
+
+export default SelectedStudent;

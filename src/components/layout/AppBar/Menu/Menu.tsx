@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { ChevronDown, Menu as MenuIcon, X } from 'lucide-react';
-import MenuItem from './MenuItem';
+import React, { useEffect, useState } from 'react';
 import MenuDropdown from './MenuDropdown';
+import MenuItem from './MenuItem';
 import { MenuItemType } from './types';
 
 interface MenuProps {
@@ -87,7 +87,6 @@ const Menu: React.FC<MenuProps> = ({ items, className = '', logo }) => {
                 onClick={(e) => {
                   if (item.children) {
                     e.preventDefault();
-                    // Toggle children visibility logic could be added here
                   }
                 }}
               >
