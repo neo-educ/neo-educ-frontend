@@ -7,7 +7,7 @@ const routesConfig: {
   key: string;
 }[] = [
   {
-    path: "cadastro-aluno/:token", // Alterado de :id para :token
+    path: "convite/:token", // Alterado de :id para :token
     Component: CadastroAluno,
     key: "CadastroAluno",
   },

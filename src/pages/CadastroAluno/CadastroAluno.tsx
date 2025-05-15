@@ -85,14 +85,15 @@ const CadastroAluno = () => {
       ...formData,
       token,
       interests: selectedInterest.map((interest) => interest.id),
+      proficiencyLevel: ProficiencyLevel[formData.proficiencyLevel],
     };
     try {
       setLoading(true);
-      await api.post("students", data);
+      await api.post("/students",data);
       toast.success("Cadastro realizado com sucesso!");
       setLoading(false);
       return true; // Retorna sucesso
-    } catch (error: any) {
+    } catch (error:any) {
       toast.error(error.response?.data?.message || "Erro ao cadastrar aluno.");
       setLoading(false);
       return false; // Retorna falha

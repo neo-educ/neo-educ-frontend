@@ -3,6 +3,7 @@ import Navbar from "../../components/layout/AppBar/Navbar";
 import ClassPlansPage from "../../pages/Authenticated/ClassPlan/page";
 import Home from "../../pages/Authenticated/Home/Home";
 import { PageMaterialGeneration } from "../../pages/Authenticated/materialGeneration/page";
+import Students from "../../pages/Authenticated/Students/Students";
 const routesConfig: {
   path: string;
   Component: React.ComponentType;
@@ -11,7 +12,7 @@ const routesConfig: {
   {
     path: "/home",
     Component: Home,
-    key: "login",
+    key: "Login",
   },
   {
     path: "/planos-de-aulas",
@@ -22,6 +23,11 @@ const routesConfig: {
     path: "/geracao-de-materiais",
     Component: PageMaterialGeneration,
     key: "GeracaoDeMateriais",
+  },
+  {
+    path: "/gerenciamento-de-alunos",
+    Component: Students,
+    key: "Students",
   }
 ];
 

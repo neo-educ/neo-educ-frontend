@@ -1,5 +1,5 @@
-import React from 'react';
 import { ChevronDown } from 'lucide-react';
+import React from 'react';
 import { MenuItemType } from './types';
 
 interface MenuItemProps {

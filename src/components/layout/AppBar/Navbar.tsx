@@ -1,12 +1,26 @@
+import { useEffect, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { FaDoorOpen, FaGear } from "react-icons/fa6";
 import { useAuth } from "../../../contexts/AuthContext";
 import Menu from "./Menu/Menu";
-import { menuItems } from "./menuPaths";
+import { menuItems as items } from "./menuPaths";
 
 
 const Navbar = () => {
     const {user,signOut}=useAuth();
+    const [menuItems,setMenuItems] = useState(items);
+    
+    useEffect(() => {
+      const handleRouteChange = () => {
+        const currentPath = window.location.pathname;
+        const updatedMenuItems = menuItems.map(item => ({
+          ...item,
+          active: item.href === currentPath,
+        }));
+        setMenuItems(updatedMenuItems);
+      };
+      handleRouteChange();
+    }, []);
 
   return (
     <div className="navbar bg-base-200">

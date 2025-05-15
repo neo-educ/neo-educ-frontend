@@ -22,4 +22,15 @@ api.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
+
+api.interceptors.response.use(response=>{
+  return Promise.resolve(response);
+},error=>{
+  if (error.response.status === 401) {
+    Cookies.remove('token');
+    window.location.href = '/auth/login';
+  }
+  return Promise.reject(error);
+})
+
 export default api;
