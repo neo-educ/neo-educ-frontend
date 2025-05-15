@@ -20,6 +20,7 @@ const GeneratedActivity = ({
         </div>
       ))}
       </div>
+      <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
     </dialog>
   );
 };

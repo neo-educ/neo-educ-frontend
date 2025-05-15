@@ -105,13 +105,20 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
                     id="level"
                     className="select select-bordered w-full"
                     disabled={formData.studentLevel}
+                    value={formData.level}
+                    onChange={(e) =>
+                      setFormData({ ...formData, level: e.target.value })
+                    }
                   >
                     <option value="" disabled>
                       Selecione o nível
                     </option>
-                    <option value="beginner">Iniciante</option>
-                    <option value="intermediate">Intermediário</option>
-                    <option value="advanced">Avançado</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                    <option value="C2">C2</option>
                   </select>
                 </div>
                 <div>
