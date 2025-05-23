@@ -26,7 +26,7 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(response=>{
   return Promise.resolve(response);
 },error=>{
-  if (error.response.status === 401) {
+  if (error.response.status === 401 && !window.location.pathname.includes('/auth')) {
     Cookies.remove('token');
     window.location.href = '/auth/login';
   }
