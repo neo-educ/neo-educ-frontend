@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../../config/axios";
@@ -10,23 +11,22 @@ export const useLoginController = () => {
     try {
       setLoading(true);
       const response = await api.post("auth/login", data);
-      if (response.status === 200) {
-        const result = response.data;
-        const user = result.user;
-        const token = result.token;
-        const expiresIn = result.expiresIn;
+      const result = response.data;
+      const user = result.user;
+      const token = result.token;
+      const expiresIn = result.expiresIn;
 
-        signIn({
-          user,
-          token,
-          expiresIn,
-        });
+      signIn({
+        user,
+        token,
+        expiresIn,
+      });
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Erro ao fazer login");
       } else {
-        toast.error(response.data.message || "Erro ao fazer login");
+        toast.error("Erro ao fazer login");
       }
-    } catch (error) {
-      console.error("Erro ao fazer login", error);
-      toast.error("Erro ao fazer login");
     } finally {
       setLoading(false);
     }

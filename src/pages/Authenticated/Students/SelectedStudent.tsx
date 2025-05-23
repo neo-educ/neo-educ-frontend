@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../../../config/axios";
+import ActivitiesHistory from "./ActivitiesHistory";
 import GeneratedActivity from "./GeneratedActivity";
 import { Student } from "./types";
 
@@ -183,89 +184,9 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
               className="tab"
               aria-label="Histórico de Atividades"
             />
-            <div className="tab-content border-base-300 bg-base-100 p-4">
-              <div className="overflow-x-auto">
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th>Data</th>
-                      <th>Id Atividade</th>
-                      <th>Status</th>
-                      <th>Nota</th>
-                    </tr>
-                  </thead>
-                  <tbody>{/* Existing activity history rows */}</tbody>
-                </table>
-              </div>
-              <form className="flex flex-col gap-4 mt-4">
-                <div>
-                  <label
-                    htmlFor="activity-date"
-                    className="block text-gray-700 font-medium"
-                  >
-                    Data
-                  </label>
-                  <input
-                    type="date"
-                    id="activity-date"
-                    className="input input-bordered w-full"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="activity-id"
-                    className="block text-gray-700 font-medium"
-                  >
-                    Id Atividade
-                  </label>
-                  <input
-                    type="text"
-                    id="activity-id"
-                    className="input input-bordered w-full"
-                    placeholder="Digite o ID da atividade"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="activity-status"
-                    className="block text-gray-700 font-medium"
-                  >
-                    Status
-                  </label>
-                  <select
-                    id="activity-status"
-                    className="select select-bordered w-full"
-                  >
-                    <option value="completed">Concluído</option>
-                    <option value="pending">Pendente</option>
-                    <option value="failed">Falhou</option>
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="activity-grade"
-                    className="block text-gray-700 font-medium"
-                  >
-                    Nota
-                  </label>
-                  <input
-                    type="number"
-                    id="activity-grade"
-                    className="input input-bordered w-full"
-                    placeholder="Digite a nota"
-                    min="0"
-                    max="10"
-                    step="0.1"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="btn bg-blue-500 text-white font-medium rounded-md mt-4"
-                >
-                  Adicionar Histórico
-                </button>
-              </form>
-            </div>
+            <ActivitiesHistory
+            studentId={selectedStudent.id}
+            />
 
             <input
               type="radio"
