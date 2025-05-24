@@ -1,17 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import api from "../../../config/axios";
-
-interface ActivityHistory {
-  date: Date;
-  subject: string;
-  unit: number;
-  status: "COMPLETED" | "PENDING";
-  grade: number;
-}
+import { ActivityHistory } from "./types";
 
 const activitySchema = z.object({
   unit: z.string().refine((val) => {
@@ -25,27 +18,16 @@ const activitySchema = z.object({
   subject: z.string(),
 });
 
-const ActivitiesHistory = ({ studentId }: { studentId: string }) => {
+const ActivitiesHistory = ({
+  data,
+  fetchData,
+  studentId,
+}: {
+  data: ActivityHistory[];
+  fetchData: () => void;
+  studentId: string;
+}) => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<ActivityHistory[]>([]); // Adjust the type as needed
-
-  const fetchActivitiesHistory = async () => {
-    if (!studentId) return;
-    setLoading(true);
-    try {
-      const response = await api.get(`/activity/${studentId}`);
-      const data = response.data;
-      setData(data as ActivityHistory[]);
-    } catch {
-      toast.error("Erro ao buscar histórico de atividades.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchActivitiesHistory();
-  }, []);
 
   const {
     handleSubmit,
@@ -70,7 +52,7 @@ const ActivitiesHistory = ({ studentId }: { studentId: string }) => {
         grade: parseFloat(data.grade),
       });
       toast.success("Atividade adicionada com sucesso!");
-      fetchActivitiesHistory();
+      fetchData();
     } catch {
       toast.error("Erro ao adicionar atividade.");
     } finally {

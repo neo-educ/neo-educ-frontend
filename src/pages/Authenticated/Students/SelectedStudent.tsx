@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import api from "../../../config/axios";
 import ActivitiesHistory from "./ActivitiesHistory";
 import GeneratedActivity from "./GeneratedActivity";
-import { Student } from "./types";
+import ProgressReport from "./ProgressReport";
+import { ActivityHistory, Student } from "./types";
 
 interface Props {
   selectedStudent: Student;
@@ -19,6 +21,25 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
 
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activityHistory, setActivityHistory] = useState<ActivityHistory[]>([]); // Adjust the type as needed
+
+  const fetchActivitiesHistory = async () => {
+    if (!selectedStudent.id) return;
+    setLoading(true);
+    try {
+      const response = await api.get(`/activity/${selectedStudent.id}`);
+      const data = response.data;
+      setActivityHistory(data as ActivityHistory[]);
+    } catch {
+      toast.error("Erro ao buscar histórico de atividades.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchActivitiesHistory();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,7 +206,9 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
               aria-label="Histórico de Atividades"
             />
             <ActivitiesHistory
-            studentId={selectedStudent.id}
+              data={activityHistory}
+              fetchData={fetchActivitiesHistory}
+              studentId={selectedStudent.id}
             />
 
             <input
@@ -194,9 +217,7 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
               className="tab"
               aria-label="Relatório de Progresso"
             />
-            <div className="tab-content border-base-300 bg-base-100 p-4">
-              Relatório de Progresso
-            </div>
+            <ProgressReport data={activityHistory} />
           </div>
         </div>
         <button
