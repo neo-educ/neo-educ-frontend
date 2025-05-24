@@ -1,12 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { AiOutlineLoading } from "react-icons/ai";
 import { useSignupController } from "./SignupController";
 import { SignupData, signupSchema } from "./SignupUtils";
 
 const formatPhoneNumber = (value: string) => {
   return value
-    .replace(/\D/g, "") 
+    .replace(/\D/g, "")
     .replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3") // Format as (99) 99999-9999
     .replace(/^(\d{2})(\d{0,5})/, "($1) $2") // Handle incomplete input
     .replace(/^(\(\d{2}\) \d{6})(\d{0,4})/, "$1-$2"); // Handle incomplete input
@@ -24,7 +23,7 @@ const Signup = () => {
   const { onSignup, loading } = useSignupController();
 
   const handleSubmitForm = (data: SignupData) => {
-    onSignup({...data, phone: data.phone.replace(/\D/g, "")});
+    onSignup({ ...data, phone: data.phone.replace(/\D/g, "") });
   };
   return (
     <main className="min-h-screen p-8 flex flex-col items-center pt-24">
@@ -113,7 +112,11 @@ const Signup = () => {
           className="btn bg-ne_primary w-1/4 rounded"
           disabled={loading}
         >
-          {loading ? <AiOutlineLoading className="spinner text-lg text-black" /> : "Cadastrar"}
+          {loading ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            "Cadastrar"
+          )}
         </button>
       </form>
     </main>
