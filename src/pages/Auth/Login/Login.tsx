@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { AiOutlineLoading } from "react-icons/ai";
 import { z } from "zod";
 import { useLoginController } from "./LoginController";
 
@@ -66,7 +65,9 @@ const Login = () => {
           className="btn bg-ne_primary text-white w-full py-2 rounded-md hover:bg-ne_primary-dark transition disabled:opacity-50"
           disabled={loading}
         >
-          {loading ? <AiOutlineLoading className="spinner" /> : "Login"}
+          {loading ? 
+          <span className="loading loading-spinner"></span>
+          : "Login"}
         </button>
       </form>
       <div className="flex flex-col items-center mt-6">

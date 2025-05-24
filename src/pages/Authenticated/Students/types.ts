@@ -7,3 +7,11 @@ export interface Student {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ActivityHistory {
+  date: Date;
+  subject: string;
+  unit: number;
+  status: "COMPLETED" | "PENDING";
+  grade: number;
+}
