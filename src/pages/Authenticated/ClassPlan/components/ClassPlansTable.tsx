@@ -1,48 +1,61 @@
-import React, { useState } from 'react';
-import { Search, ChevronUp, ChevronDown, Pencil, Trash2 } from 'lucide-react';
-import { ClassPlan } from '../types';
-import StatusBadge from './ClassPlansStatusBadge';
-
+import React, { useState } from "react";
+import { Search, ChevronUp, ChevronDown, Pencil, Trash2, Eye } from "lucide-react";
+import { ClassPlan } from "../types";
 interface ClassPlansTableProps {
   plans: ClassPlan[];
+  onView: (plan: ClassPlan) => void;
   onEdit: (plan: ClassPlan) => void;
   onDelete: (planId: number) => void;
 }
 
-const ClassPlansTable: React.FC<ClassPlansTableProps> = ({ plans, onEdit, onDelete }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<keyof ClassPlan>('classDate');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+const ClassPlansTable: React.FC<ClassPlansTableProps> = ({
+  plans,
+  onView,
+  onEdit,
+  onDelete,
+}) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState<keyof ClassPlan>("classDate");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
   const handleSort = (field: keyof ClassPlan) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    let isoString = dateString;
+    if (!dateString.endsWith('Z')) {
+      isoString = dateString + 'Z';
+    }
+  
+    const date = new Date(isoString);
+    return date.toLocaleString("pt-BR", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "America/Sao_Paulo",
     });
   };
+  
 
   const filteredAndSortedPlans = plans
-    .filter(plan =>
-      plan.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      plan.inputData.toLowerCase().includes(searchTerm.toLowerCase())
+    .filter(
+      (plan) =>
+        plan.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        plan.inputData.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      
-      if (sortDirection === 'asc') {
+
+      if (sortDirection === "asc") {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -54,17 +67,17 @@ const ClassPlansTable: React.FC<ClassPlansTableProps> = ({ plans, onEdit, onDele
       <ChevronUp
         size={12}
         className={`${
-          sortField === field && sortDirection === 'asc'
-            ? 'text-primary-600'
-            : 'text-gray-400'
+          sortField === field && sortDirection === "asc"
+            ? "text-primary-600"
+            : "text-gray-400"
         }`}
       />
       <ChevronDown
         size={12}
         className={`${
-          sortField === field && sortDirection === 'desc'
-            ? 'text-primary-600'
-            : 'text-gray-400'
+          sortField === field && sortDirection === "desc"
+            ? "text-primary-600"
+            : "text-gray-400"
         }`}
       />
     </span>
@@ -95,7 +108,7 @@ const ClassPlansTable: React.FC<ClassPlansTableProps> = ({ plans, onEdit, onDele
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => handleSort('topic')}
+                onClick={() => handleSort("topic")}
               >
                 <div className="flex items-center">
                   Assunto
@@ -105,7 +118,7 @@ const ClassPlansTable: React.FC<ClassPlansTableProps> = ({ plans, onEdit, onDele
               <th
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => handleSort('classDate')}
+                onClick={() => handleSort("classDate")}
               >
                 <div className="flex items-center">
                   Data
@@ -114,21 +127,14 @@ const ClassPlansTable: React.FC<ClassPlansTableProps> = ({ plans, onEdit, onDele
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => handleSort('status')}
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                <div className="flex items-center">
-                  Status
-                  <SortIcon field="status" />
-                </div>
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Roteiro
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Plano de aula
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Opções
               </th>
             </tr>
@@ -137,22 +143,31 @@ const ClassPlansTable: React.FC<ClassPlansTableProps> = ({ plans, onEdit, onDele
             {filteredAndSortedPlans.map((plan) => (
               <tr key={plan.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{plan.topic}</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {plan.topic}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{formatDate(plan.classDate)}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <StatusBadge status={plan.status} />
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-gray-500 line-clamp-2">{plan.inputData}</div>
+                  <div className="text-sm text-gray-500">
+                    {formatDate(plan.classDate)}
+                  </div>
                 </td>
                 <td className="px-6 py-4">
-                  <div className="text-sm text-gray-500 line-clamp-2">{plan.aiGeneratedContent}</div>
+                  <div className="text-sm text-gray-500">
+                    {plan.aiGeneratedContent?.length > 50
+                      ? plan.aiGeneratedContent.slice(0, 50) + "..."
+                      : plan.aiGeneratedContent}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => onView(plan)}
+                      className="text-gray-600 hover:text-gray-900 transition-colors"
+                      title="View details"
+                    >
+                      <Eye size={16} />
+                    </button>
                     <button
                       onClick={() => onEdit(plan)}
                       className="text-primary-600 hover:text-primary-900 transition-colors"
