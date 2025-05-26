@@ -1,30 +1,11 @@
-import { useState } from "react";
-import { ClipboardCopy, CheckCircle, FileDown } from "lucide-react";
+import { FileDown, Trash2 } from "lucide-react";
 
 interface GeneratedExercisesProps {
   exercises: string[];
+  onExerciseDelete?: (index: number) => void;
 }
 
-export function GeneratedExercises({ exercises }: GeneratedExercisesProps) {
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [allCopied, setAllCopied] = useState(false);
-
-  const handleCopyExercise = (exercise: string, index: number) => {
-    navigator.clipboard.writeText(exercise);
-    setCopiedIndex(index);
-    setTimeout(() => {
-      setCopiedIndex(null);
-    }, 2000);
-  };
-
-  const handleCopyAll = () => {
-    navigator.clipboard.writeText(exercises.join("\n\n"));
-    setAllCopied(true);
-    setTimeout(() => {
-      setAllCopied(false);
-    }, 2000);
-  };
-
+export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExercisesProps) {
   const handleGeneratePDF = () => {
     console.log("Generating PDF with exercises:", exercises);
     alert("Funcionalidade de PDF será implementada em breve!");
@@ -85,6 +66,13 @@ export function GeneratedExercises({ exercises }: GeneratedExercisesProps) {
       .filter(Boolean);
   };
 
+  // Agrupa os exercícios usando o formato específico da resposta
+  const groupedExercises = exercises.reduce((acc: string[], exercise: string) => {
+    // Divide o texto em blocos usando duas quebras de linha como separador
+    const blocks = exercise.split('\n\n').filter(block => block.trim() !== '');
+    return [...acc, ...blocks];
+  }, []);
+
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
       <div className="bg-gray-900 px-6 py-4">
@@ -93,33 +81,22 @@ export function GeneratedExercises({ exercises }: GeneratedExercisesProps) {
           <div className="flex gap-2">
             <button
               onClick={handleGeneratePDF}
-              className="flex items-center px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded transition-colors"
+              disabled={groupedExercises.length === 0}
+              className={`flex items-center px-3 py-1 ${
+                groupedExercises.length === 0
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : 'bg-gray-700 hover:bg-gray-600'
+              } text-white text-sm rounded transition-colors`}
             >
               <FileDown className="h-4 w-4 mr-1" />
               Gerar PDF
-            </button>
-            <button
-              onClick={handleCopyAll}
-              className="flex items-center px-3 py-1 bg-[#FF7A00] hover:bg-orange-600 text-white text-sm rounded transition-colors"
-            >
-              {allCopied ? (
-                <>
-                  <CheckCircle className="h-4 w-4 mr-1" />
-                  Copiado tudo
-                </>
-              ) : (
-                <>
-                  <ClipboardCopy className="h-4 w-4 mr-1" />
-                  Copiar tudo
-                </>
-              )}
             </button>
           </div>
         </div>
       </div>
       <div className="p-6">
         <div className="grid grid-cols-1 gap-6">
-          {exercises.map((exercise, index) => (
+          {groupedExercises.map((exercise, index) => (
             <div
               key={index}
               className="p-6 border border-gray-200 rounded-lg hover:border-[#FF7A00] transition-colors group bg-gray-50"
@@ -131,14 +108,10 @@ export function GeneratedExercises({ exercises }: GeneratedExercisesProps) {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleCopyExercise(exercise, index)}
-                  className="ml-4 text-gray-500 hover:text-[#FF7A00] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                  onClick={() => onExerciseDelete?.(index)}
+                  className="ml-4 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                 >
-                  {copiedIndex === index ? (
-                    <CheckCircle className="h-5 w-5" />
-                  ) : (
-                    <ClipboardCopy className="h-5 w-5" />
-                  )}
+                  <Trash2 className="h-5 w-5" />
                 </button>
               </div>
             </div>

@@ -81,6 +81,10 @@ export function PageMaterialGeneration() {
     setExercises([]);
   };
 
+  const handleExerciseDelete = (index: number) => {
+    setExercises(prevExercises => prevExercises.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="flex flex-col max-w-4xl mx-auto mt-8 gap-8 p-4">
       <div className="flex flex-col gap-2 w-full p-4 bg-gray-100 rounded-sm">
@@ -290,7 +294,10 @@ export function PageMaterialGeneration() {
       )}
 
       {isGenerated && !isLoading && materialType === "exercises" && (
-        <GeneratedExercises exercises={exercises} />
+        <GeneratedExercises 
+          exercises={exercises} 
+          onExerciseDelete={handleExerciseDelete}
+        />
       )}
     </div>
   );
