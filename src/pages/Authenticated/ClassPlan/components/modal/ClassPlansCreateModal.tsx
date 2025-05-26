@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { ClassPlanCreate } from '../../types';
+import { ClassPlanCreate } from "../../types";
+import { ptBR } from "date-fns/locale";
 
 interface CreateClassPlanModalProps {
   isOpen: boolean;
@@ -15,13 +16,13 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  teacherEmail
+  teacherEmail,
 }) => {
   const [formData, setFormData] = useState<ClassPlanCreate>({
-    topic: '',
+    topic: "",
     classDate: new Date(),
-    inputData: '',
-    teacher_email: teacherEmail
+    inputData: "",
+    teacher_email: teacherEmail,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,7 +37,9 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-full max-w-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">Criar Plano de Aula</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Criar Plano de Aula
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500 transition-colors"
@@ -44,10 +47,13 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
             <X size={20} />
           </button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="topic" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="topic"
+              className="block text-sm font-medium text-gray-700"
+            >
               Assunto
             </label>
             <input
@@ -56,34 +62,48 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
               value={formData.topic}
-              onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, topic: e.target.value })
+              }
             />
           </div>
 
           <div>
-            <label htmlFor="classDate" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="classDate"
+              className="block text-sm font-medium text-gray-700"
+            >
               Data da aula
             </label>
             <DatePicker
               selected={formData.classDate}
-              onChange={(date) => setFormData({ ...formData, classDate: date || new Date() })}
+              onChange={(date) =>
+                setFormData({ ...formData, classDate: date || new Date() })
+              }
               showTimeSelect
-              dateFormat="MMMM d, yyyy h:mm aa"
+              dateFormat="Pp"
+              locale={ptBR}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
             />
           </div>
 
           <div>
-            <label htmlFor="inputData" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="inputData"
+              className="block text-sm font-medium text-gray-700"
+            >
               Roteiro
             </label>
             <textarea
               id="inputData"
+              placeholder="Digite o tópico referente ao assunto da aula"
               required
               rows={4}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
               value={formData.inputData}
-              onChange={(e) => setFormData({ ...formData, inputData: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, inputData: e.target.value })
+              }
             />
           </div>
 
