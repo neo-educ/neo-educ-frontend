@@ -1,4 +1,9 @@
 import { FileDown, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { EmailModal } from "./EmailModal";
+import { exportExercisesToPDF } from "../../../../services/materialGenerationApi";
+import { toast } from "react-hot-toast";
+import Cookies from "js-cookie";
 
 interface GeneratedExercisesProps {
   exercises: string[];
@@ -6,9 +11,36 @@ interface GeneratedExercisesProps {
 }
 
 export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExercisesProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleGeneratePDF = () => {
-    console.log("Generating PDF with exercises:", exercises);
-    alert("Funcionalidade de PDF será implementada em breve!");
+    setIsModalOpen(true);
+  };
+
+  const handleSendPDF = async (email: string) => {
+    try {
+      setIsLoading(true);
+      const token = Cookies.get("token");
+      if (!token) {
+        throw new Error("Token não encontrado");
+      }
+      
+      await exportExercisesToPDF(
+        {
+          selectedExercises: exercises,
+          studentEmail: email,
+        },
+        token
+      );
+      toast.success("PDF enviado com sucesso!");
+      setIsModalOpen(false);
+    } catch (error) {
+      toast.error("Erro ao enviar PDF. Tente novamente.");
+      console.error("Error sending PDF:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formatExerciseText = (exercise: string) => {
@@ -66,9 +98,7 @@ export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExe
       .filter(Boolean);
   };
 
-  // Agrupa os exercícios usando o formato específico da resposta
   const groupedExercises = exercises.reduce((acc: string[], exercise: string) => {
-    // Divide o texto em blocos usando duas quebras de linha como separador
     const blocks = exercise.split('\n\n').filter(block => block.trim() !== '');
     return [...acc, ...blocks];
   }, []);
@@ -81,9 +111,9 @@ export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExe
           <div className="flex gap-2">
             <button
               onClick={handleGeneratePDF}
-              disabled={groupedExercises.length === 0}
+              disabled={exercises.length === 0}
               className={`flex items-center px-3 py-1 ${
-                groupedExercises.length === 0
+                exercises.length === 0
                   ? 'bg-gray-500 cursor-not-allowed'
                   : 'bg-gray-700 hover:bg-gray-600'
               } text-white text-sm rounded transition-colors`}
@@ -118,6 +148,13 @@ export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExe
           ))}
         </div>
       </div>
+
+      <EmailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSend={handleSendPDF}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

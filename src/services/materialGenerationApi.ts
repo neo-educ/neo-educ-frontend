@@ -56,3 +56,27 @@ export const generateExercises = async (formData: ExerciseGenerationFormData, to
     throw error;
   }
 };
+
+interface ExportPDFData {
+  selectedExercises: string[];
+  studentEmail: string;
+}
+
+export const exportExercisesToPDF = async (data: ExportPDFData, token: string) => {
+  try {
+    const response = await axios.post(
+      'http://localhost:8080/api/materiais/exercise/export',
+      data,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error exporting exercises to PDF:', error);
+    throw error;
+  }
+};
