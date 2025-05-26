@@ -27,3 +27,32 @@ export const generateMaterial = async (data: MaterialGenerationFormData, token: 
     throw error;
   }
 };
+
+interface ExerciseGenerationFormData {
+  topic: string;
+  level: string;
+  interests: string[];
+  quantity: number;
+}
+
+export const generateExercises = async (formData: ExerciseGenerationFormData, token: string): Promise<string[]> => {
+  try {
+    const response = await axios.post<string>(
+      'http://localhost:8080/api/materiais/exercise',
+      formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const text = response.data;
+    const exercises = text.split('\n\n').filter(exercise => exercise.trim() !== '');
+    return exercises;
+  } catch (error) {
+    console.error('Error generating exercises:', error);
+    throw error;
+  }
+};
