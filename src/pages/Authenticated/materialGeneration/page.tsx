@@ -98,10 +98,10 @@ export function PageMaterialGeneration() {
         <div className="bg-white rounded-lg border border-gray-200 p-1 flex">
           <button
             onClick={() => handleMaterialTypeChange("conversation")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all cursor-pointer ${
               materialType === "conversation"
                 ? "bg-[#FF7A00] text-white shadow-sm"
-                : "text-gray-600 hover:text-[#FF7A00]"
+                : "text-gray-600 hover:text-[#FF7A00] hover:bg-gray-50"
             }`}
           >
             <MessageCircle size={18} />
@@ -109,10 +109,10 @@ export function PageMaterialGeneration() {
           </button>
           <button
             onClick={() => handleMaterialTypeChange("exercises")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all cursor-pointer ${
               materialType === "exercises"
                 ? "bg-[#FF7A00] text-white shadow-sm"
-                : "text-gray-600 hover:text-[#FF7A00]"
+                : "text-gray-600 hover:text-[#FF7A00] hover:bg-gray-50"
             }`}
           >
             <FileText size={18} />
@@ -154,7 +154,7 @@ export function PageMaterialGeneration() {
               <select
                 id="level"
                 name="level"
-                className="p-3 border border-gray-300 rounded-md hover:border-[#FF7A00] focus:border-[#FF7A00] focus:outline-none bg-white w-full font-sans text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:border-transparent cursor-pointer hover:border-[#FF7A00] transition-colors"
                 required
               >
                 <option value="A1">Beginner (A1)</option>
@@ -183,7 +183,11 @@ export function PageMaterialGeneration() {
 
             <button
               type="submit"
-              className="px-6 py-3 bg-[#FF7A00] hover:bg-orange-600 text-white font-sans font-medium text-xl w-1/2 mx-auto rounded-md transition-colors disabled:opacity-50"
+              className={`w-full py-2 px-4 rounded-md text-white font-medium ${
+                isLoading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-[#FF7A00] hover:bg-[#E56E00] cursor-pointer'
+              } transition-colors`}
               disabled={isLoading}
             >
               {isLoading ? "Gerando..." : "Gerar"}
@@ -225,7 +229,7 @@ export function PageMaterialGeneration() {
               <select
                 id="exerciseLevel"
                 name="exerciseLevel"
-                className="p-3 border border-gray-300 rounded-md hover:border-[#FF7A00] focus:border-[#FF7A00] focus:outline-none bg-white w-full font-sans text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:border-transparent cursor-pointer hover:border-[#FF7A00] transition-colors"
                 required
               >
                 <option value="A1">A1</option>
@@ -261,7 +265,7 @@ export function PageMaterialGeneration() {
               <select
                 id="exerciseQuantity"
                 name="exerciseQuantity"
-                className="p-3 border border-gray-300 rounded-md hover:border-[#FF7A00] focus:border-[#FF7A00] focus:outline-none bg-white w-full font-sans text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7A00] focus:border-transparent cursor-pointer hover:border-[#FF7A00] transition-colors"
                 required
               >
                 {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
@@ -274,7 +278,11 @@ export function PageMaterialGeneration() {
 
             <button
               type="submit"
-              className="px-6 py-3 bg-[#FF7A00] hover:bg-orange-600 text-white font-sans font-medium text-xl w-1/2 mx-auto rounded-md transition-colors disabled:opacity-50"
+              className={`w-full py-2 px-4 rounded-md text-white font-medium ${
+                isLoading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-[#FF7A00] hover:bg-[#E56E00] cursor-pointer'
+              } transition-colors`}
               disabled={isLoading}
             >
               {isLoading ? "Gerando..." : "Gerar Exercícios"}

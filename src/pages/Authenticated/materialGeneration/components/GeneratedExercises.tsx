@@ -115,7 +115,7 @@ export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExe
               className={`flex items-center px-3 py-1 ${
                 exercises.length === 0
                   ? 'bg-gray-500 cursor-not-allowed'
-                  : 'bg-gray-700 hover:bg-gray-600'
+                  : 'bg-gray-700 hover:bg-gray-600 cursor-pointer'
               } text-white text-sm rounded transition-colors`}
             >
               <FileDown className="h-4 w-4 mr-1" />
@@ -139,7 +139,7 @@ export function GeneratedExercises({ exercises, onExerciseDelete }: GeneratedExe
                 </div>
                 <button
                   onClick={() => onExerciseDelete?.(index)}
-                  className="ml-4 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                  className="ml-4 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 cursor-pointer"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>

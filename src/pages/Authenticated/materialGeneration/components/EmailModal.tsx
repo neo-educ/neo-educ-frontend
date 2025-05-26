@@ -19,13 +19,13 @@ export function EmailModal({ isOpen, onClose, onSend, isLoading }: EmailModalPro
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-900">Enviar PDF por Email</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 cursor-pointer transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -51,7 +51,7 @@ export function EmailModal({ isOpen, onClose, onSend, isLoading }: EmailModalPro
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors cursor-pointer"
             >
               Cancelar
             </button>
@@ -59,7 +59,7 @@ export function EmailModal({ isOpen, onClose, onSend, isLoading }: EmailModalPro
               type="submit"
               disabled={isLoading}
               className={`px-4 py-2 text-sm font-medium text-white bg-[#FF7A00] hover:bg-[#E56E00] rounded-md transition-colors ${
-                isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
               }`}
             >
               {isLoading ? 'Enviando...' : 'Enviar PDF'}
