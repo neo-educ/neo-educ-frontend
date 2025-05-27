@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, ChevronUp, ChevronDown, Pencil, Trash2, Eye } from "lucide-react";
+import { Search, ChevronUp, ChevronDown, Trash2, Eye } from "lucide-react";
 import { ClassPlan } from "../types";
 interface ClassPlansTableProps {
   plans: ClassPlan[];
@@ -11,7 +11,6 @@ interface ClassPlansTableProps {
 const ClassPlansTable: React.FC<ClassPlansTableProps> = ({
   plans,
   onView,
-  onEdit,
   onDelete,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -167,12 +166,6 @@ const ClassPlansTable: React.FC<ClassPlansTableProps> = ({
                       title="View details"
                     >
                       <Eye size={16} />
-                    </button>
-                    <button
-                      onClick={() => onEdit(plan)}
-                      className="text-primary-600 hover:text-primary-900 transition-colors"
-                    >
-                      <Pencil size={16} />
                     </button>
                     <button
                       onClick={() => onDelete(plan.id)}
