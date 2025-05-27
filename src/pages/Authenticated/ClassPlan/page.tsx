@@ -31,15 +31,18 @@ const ClassPlansPage: React.FC = () => {
   }, []);
 
   const handleCreatePlan = async (data: ClassPlanCreate) => {
-    const response = await api.post("class-plans", data);
-    if (response.status === 200) {
+    try {
+      await api.post("class-plans", data);
       toast.success("Plano de aula criado com sucesso!");
       await fetchClassPlans();
-    } else {
-      toast.error(response.data.message || "Erro ao criar plano de aula");
+    } catch (error: unknown) {
+      const message =
+      //@ts-expect-error falta de tipagem pelo typescript
+        error.response?.data?.message || error.response?.data?.detail || "Erro ao criar plano de aula";
+      toast.error(message);
     }
   };
-
+  
   const handleViewPlan = (plan: ClassPlan) => {
     setSelectedPlan(plan);
     setIsViewModalOpen(true);
@@ -94,21 +97,6 @@ const ClassPlansPage: React.FC = () => {
     }
   };
 
-  const handleDateClick = (date: Date) => {
-    const plansOnDate = classPlans.filter(plan => {
-      const planDate = new Date(plan.classDate);
-      return (
-        planDate.getDate() === date.getDate() &&
-        planDate.getMonth() === date.getMonth() &&
-        planDate.getFullYear() === date.getFullYear()
-      );
-    });
-
-    if (plansOnDate.length > 0) {
-      handleViewPlan(plansOnDate[0]);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -144,7 +132,6 @@ const ClassPlansPage: React.FC = () => {
           <div>
             <ClassPlanCalendar 
               plans={classPlans} 
-              onDateClick={handleDateClick}
             />
           </div>
         </div>
