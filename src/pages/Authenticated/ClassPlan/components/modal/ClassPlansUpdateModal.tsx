@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { ClassPlanCreate } from '../../types';
+import { ptBR } from "date-fns/locale";
 
 interface UpdateClassPlanModalProps {
   isOpen: boolean;
@@ -65,28 +66,17 @@ const UpdateClassPlanModal: React.FC<UpdateClassPlanModalProps> = ({
             <label htmlFor="classDate" className="block text-sm font-medium text-gray-700">
               Data da aula
             </label>
-            <DatePicker
-              selected={new Date(formData.classDate)}
-              onChange={(date) => setFormData({ ...formData, classDate: date || new Date() })}
-              showTimeSelect
-              dateFormat="MMMM d, yyyy h:mm aa"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="inputData" className="block text-sm font-medium text-gray-700">
-              Roteiro
-            </label>
-            <textarea
-              id="inputData"
-              required
-              rows={4}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-              value={formData.inputData}
-              onChange={(e) => setFormData({ ...formData, inputData: e.target.value })}
-            />
-          </div>
+             <DatePicker
+               selected={formData.classDate}
+               onChange={(date) =>
+                 setFormData({ ...formData, classDate: date || new Date() })
+               }
+               showTimeSelect
+               dateFormat="Pp"
+               locale={ptBR}
+               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+             />
+           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
             <button

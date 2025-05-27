@@ -7,9 +7,12 @@ import { ClassPlan, ClassPlanCreate } from "./types";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../config/axios";
 import toast from "react-hot-toast";
+import ViewClassPlanModal from "./components/modal/ViewClassPlansModal";
+import ClassPlanCalendar from "./components/ClassPlansCalendar";
 
 const ClassPlansPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<ClassPlan | null>(null);
   const { user } = useAuth();
   const [classPlans, setClassPlans] = useState<ClassPlan[]>([]);
@@ -28,33 +31,41 @@ const ClassPlansPage: React.FC = () => {
   }, []);
 
   const handleCreatePlan = async (data: ClassPlanCreate) => {
-    const response = await api.post("class-plans", data);
-    if (response.status === 200) {
+    try {
+      await api.post("class-plans", data);
       toast.success("Plano de aula criado com sucesso!");
       await fetchClassPlans();
-    } else {
-      toast.error(response.data.message || "Erro ao criar plano de aula");
+    } catch (error: unknown) {
+      const message =
+      //@ts-expect-error falta de tipagem pelo typescript
+        error.response?.data?.message || error.response?.data?.detail || "Erro ao criar plano de aula";
+      toast.error(message);
     }
+  };
+  
+  const handleViewPlan = (plan: ClassPlan) => {
+    setSelectedPlan(plan);
+    setIsViewModalOpen(true);
   };
 
   const handleUpdatePlan = async (data: ClassPlanCreate) => {
     if (!selectedPlan) return;
-  
+
     try {
       const response = await api.put(
         `class-plans/update/${selectedPlan.id}`,
         {
           topic: data.topic,
           classDate: data.classDate,
-          inputData: data.inputData
+          inputData: data.inputData,
         },
         {
           headers: {
-            "Content-Type": "application/json" 
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
-  
+
       if (response.status === 200) {
         toast.success("Plano de aula atualizado com sucesso!");
         await fetchClassPlans();
@@ -66,7 +77,6 @@ const ClassPlansPage: React.FC = () => {
       toast.error("Erro ao fazer requisição para atualizar plano de aula");
     }
   };
-  
 
   const handleEditPlan = (plan: ClassPlan) => {
     setSelectedPlan(plan);
@@ -80,7 +90,9 @@ const ClassPlansPage: React.FC = () => {
         toast.success("Plano de aula deletado com sucesso!");
         await fetchClassPlans();
       } else {
-        toast.error(response.data.message || "Não foi possível deletar o plano de aula");
+        toast.error(
+          response.data.message || "Não foi possível deletar o plano de aula"
+        );
       }
     }
   };
@@ -90,7 +102,9 @@ const ClassPlansPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Seus Planos de Aulas</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Seus Planos de Aulas
+            </h1>
             <p className="mt-2 text-sm text-gray-700">
               Gerencie e visualize todos os seus planos de aula em um só lugar
             </p>
@@ -106,11 +120,21 @@ const ClassPlansPage: React.FC = () => {
             Novo Plano de Aula
           </button>
         </div>
-        <ClassPlansTable
-          plans={classPlans}
-          onEdit={handleEditPlan}
-          onDelete={handleDeletePlan}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2">
+            <ClassPlansTable 
+              plans={classPlans}
+              onView={handleViewPlan}
+              onEdit={handleEditPlan}
+              onDelete={handleDeletePlan}
+            />
+          </div>
+          <div>
+            <ClassPlanCalendar 
+              plans={classPlans} 
+            />
+          </div>
+        </div>
 
         {!selectedPlan && (
           <CreateClassPlanModal
@@ -140,6 +164,14 @@ const ClassPlansPage: React.FC = () => {
             }}
           />
         )}
+        <ViewClassPlanModal
+          isOpen={isViewModalOpen}
+          onClose={() => {
+            setIsViewModalOpen(false);
+            setSelectedPlan(null);
+          }}
+          plan={selectedPlan}
+        />
       </div>
     </div>
   );

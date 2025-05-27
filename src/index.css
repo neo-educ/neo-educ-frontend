@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@tailwind utilities;
 
 *{
   /* font-family: 'Itim',cursive; */
@@ -22,4 +23,82 @@
   animation: twinkle 1.2s infinite ease-in-out;
 }
 
+.react-calendar {
+  width: 100% !important;
+  border: none !important;
+  font-family: inherit !important;
+  background: transparent !important;
+}
+
+.react-calendar__tile {
+  padding: 1rem !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.5rem !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+.react-calendar__tile--now {
+  background: #f0f7ff !important;
+  color: #0078c3 !important;
+}
+
+.react-calendar__tile--active {
+  background: #0078c3 !important;
+  color: white !important;
+}
+
+.react-calendar__tile--hasActive {
+  background: #0078c3 !important;
+  color: white !important;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 1rem !important;
+}
+
+.react-calendar__navigation button {
+  font-size: 1rem !important;
+  color: #374151 !important;
+  font-weight: 500 !important;
+}
+
+.react-calendar__navigation button:disabled {
+  background-color: transparent !important;
+  color: #9CA3AF !important;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f0f7ff !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  font-weight: 600 !important;
+  color: #4B5563 !important;
+  text-decoration: none !important;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none !important;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e0effe !important;
+  color: #0078c3 !important;
+}
+
+.react-calendar__tile.has-class-plan {
+  position: relative;
+  font-weight: 600 !important;
+}
+
+.react-calendar__tile.has-class-plan:hover {
+  background-color: #bae0fd !important;
+}
 
