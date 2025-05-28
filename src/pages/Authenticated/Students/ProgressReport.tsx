@@ -77,7 +77,7 @@ const ProgressReport = ({ data }: { data: ActivityHistory[] }) => {
       <div className="flex items-center justify-between">
         <h1 className="font-semibold text-lg">Relatório do Progresso</h1>
         <button
-          disabled={loading}
+          disabled={loading || !gradesByUnit.length || !gradesBySubject.length}
           className="btn flex items-center gap-2"
           onClick={generateIAReport}
         >
@@ -91,7 +91,17 @@ const ProgressReport = ({ data }: { data: ActivityHistory[] }) => {
           )}
         </button>
       </div>
-      <div className="flex gap-4 items-center mt-4">
+      {gradesBySubject.length !=0 && gradesByUnit.length !=0 && (
+        <p className="text-gray-600 text-sm mt-2">
+          Clique no botão acima para gerar um relatório detalhado do progresso
+          do aluno com base nas notas por assunto e unidade.
+        </p>
+      ) || (
+        <p className="text-gray-600 text-sm mt-2">
+          Nenhum dado disponível para gerar o relatório.
+        </p>
+      ) }
+      {gradesBySubject.length !=0 && gradesByUnit.length !=0 && <div className="flex gap-4 items-center mt-4">
         <div className="bg-base-300 p-4 rounded-lg shadow-md w-full">
           <h2 className="text-md mb-2">Média de Notas por Unidade</h2>
           <ul>
@@ -136,7 +146,7 @@ const ProgressReport = ({ data }: { data: ActivityHistory[] }) => {
             ))}
           </ul>
         </div>
-      </div>
+      </div>}
       <GeneratedProgressReport response={reportResponse} loading={loading} />
     </div>
   );
