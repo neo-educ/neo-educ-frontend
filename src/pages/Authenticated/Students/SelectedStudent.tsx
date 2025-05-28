@@ -5,6 +5,7 @@ import api from "../../../config/axios";
 import ActivitiesHistory from "./ActivitiesHistory";
 import GeneratedActivity from "./GeneratedActivity";
 import ProgressReport from "./ProgressReport";
+import StudentNotes from "./StudentNotes";
 import { ActivityHistory, Student } from "./types";
 
 interface Props {
@@ -247,6 +248,7 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
               className="tab"
               aria-label="Notas do Aluno"
             />
+            <StudentNotes student={selectedStudent}/>
           </div>
         </div>
       </div>
