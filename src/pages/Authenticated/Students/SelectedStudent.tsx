@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaCalendar, FaGraduationCap } from "react-icons/fa6";
 import api from "../../../config/axios";
 import ActivitiesHistory from "./ActivitiesHistory";
 import GeneratedActivity from "./GeneratedActivity";
@@ -77,15 +78,37 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2">
-      <h3 className="text-xl font-regular">{selectedStudent.name}</h3>
+      <div className="flex items-center justify-between">
+        <div className="">
+          <h3 className="text-xl font-regular font-semibold">
+            {selectedStudent.name.charAt(0).toUpperCase() +
+              selectedStudent.name.slice(1)}
+          </h3>
+          <span className="text-gray-500 text-md">{selectedStudent.email}</span>
+        </div>
+        <button
+          onClick={handleReturn}
+          className="btn font-thin  p-2 rounded-md self-end"
+        >
+          Voltar
+        </button>
+      </div>
       <div>
-        <p className="text-gray-600">{selectedStudent.email}</p>
-        <p className="text-gray-600">
-          Nível de Proficiência: {selectedStudent.proficiencyLevel}
-        </p>
-        <p className="text-gray-600">
-          Criado em: {new Date(selectedStudent.createdAt).toLocaleDateString()}
-        </p>
+        <div className="flex text-gray-600 font-semibold items-center gap-2">
+          <FaGraduationCap />
+          Nível de Proficiência:{" "}
+          <span className="font-normal text-gray-600">
+            {selectedStudent.proficiencyLevel}
+          </span>
+        </div>
+        <div className="text-gray-600 font-semibold flex items-center gap-2">
+          <FaCalendar />
+          Criado em:{" "}
+          <span className="font-normal text-gray-600">
+            {new Date(selectedStudent.createdAt).toLocaleDateString()}
+          </span>
+        </div>
+
         <div className="bg-gray-100 p-2 rounded-md mt-2">
           <div className="tabs tabs-lift">
             <input
@@ -220,12 +243,6 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
             <ProgressReport data={activityHistory} />
           </div>
         </div>
-        <button
-          onClick={handleReturn}
-          className="btn bg-ne_primary bg-blue-500 font-thin text-white p-2 rounded-md self-end"
-        >
-          Voltar
-        </button>
       </div>
       <GeneratedActivity activityResponse={response} />
     </div>
