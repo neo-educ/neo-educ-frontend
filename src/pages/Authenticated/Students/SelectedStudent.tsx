@@ -110,7 +110,7 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
         </div>
 
         <div className="bg-gray-100 p-2 rounded-md mt-2">
-          <div className="tabs tabs-lift">
+          <div className="tabs tabs-border">
             <input
               type="radio"
               name="my_tabs_2"
@@ -241,6 +241,12 @@ const SelectedStudent = ({ selectedStudent, handleReturn }: Props) => {
               aria-label="Relatório de Progresso"
             />
             <ProgressReport data={activityHistory} />
+            <input
+              type="radio"
+              name="my_tabs_2"
+              className="tab"
+              aria-label="Notas do Aluno"
+            />
           </div>
         </div>
       </div>
