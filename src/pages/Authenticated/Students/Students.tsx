@@ -1,12 +1,11 @@
 import { LinkIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { BiSolidRightArrowSquare } from "react-icons/bi";
+import { FaCalendar, FaGraduationCap } from "react-icons/fa6";
 import api from "../../../config/axios";
 import { useAuth } from "../../../contexts/AuthContext";
 import SelectedStudent from "./SelectedStudent";
 import { Student } from "./types";
-
 
 const Students = () => {
   const { user } = useAuth();
@@ -38,70 +37,83 @@ const Students = () => {
   };
 
   return (
-    <div className="flex flex-col max-w-4xl mx-auto mt-8 gap-8">
-      <div className="flex flex-col gap-2 w-full p-4 bg-white/60 rounded-sm">
+    <div className="flex flex-col gap-2 p-10 bg-white rounded-box mx-5 mt-8 gap-8 shadow-md">
+      <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold text-black font-sans">
-            Gerenciador de Alunos
-          </h1>
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold text-black font-sans">
+              Gerenciador de Alunos
+            </h1>
+            <h2 className="text-gray-600 text-xl font-medium            ">
+              Gerencie seus alunos com facilidade e eficiência
+            </h2>
+          </div>
           <button
             onClick={handleCopyLink}
-            className="btn bg-ne_primary bg-blue-500 font-thin text-white px-4 py-2 rounded-md"
+            className="btn btn-ghost font-thin  px-4 py-2 rounded-md"
           >
-            Copiar Link de Convite
             <LinkIcon className="ml-2 w-6 h-6" />
+            Copiar Link de Convite
           </button>
         </div>
-        <p className="text-gray-600 text-lg font-sans">
-          Aqui você pode gerenciar os alunos da sua instituição de ensino. Você
-          pode adicionar, editar e remover alunos, além de visualizar
+        <p className="text-gray-600 text-lg font-sans w-3/4">
+          Aqui você pode adicionar, editar e remover alunos, além de visualizar
           informações detalhadas sobre cada um deles.
         </p>
-        {!selectedStudent && <div>
-          <h2 className="text-2xl  text-black font-sans">Alunos Cadastrados</h2>
+      </div>
+
+      {!selectedStudent && (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold">Alunos Cadastrados</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
             {students.map((student) => (
               <div
                 key={student.id}
-                className="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2"
+                className="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 hover:shadow-2xl transition-shadow duration-200 cursor-pointer"
+                onClick={() => {
+                  setSelectedStudent(student);
+                }}
               >
                 <div className="flex items-center justify-between">
-                <h3 className="text-xl font-regular">{student.name}</h3>
-                  <button
-                  onClick={()=>{
-                    setSelectedStudent(student);
-                  }}
-                    className="btn bg-ne_primary bg-blue-500 font-thin text-white p-2 rounded-md"
-                  >
-                    <BiSolidRightArrowSquare className="w-6 h-6"/>
-                  </button>
+                  <div className="">
+                    <h3 className="text-xl font-regular font-semibold">
+                      {student.name.charAt(0).toUpperCase() +
+                        student.name.slice(1)}
+                    </h3>
+                    <span className="text-gray-500 text-md">
+                      {student.email}
+                    </span>
+                  </div>
                 </div>
                 <div>
-                  <p className="text-gray-600">{student.email}</p>
-                  <p className="text-gray-600">
-                    Nível de Proficiência: {student.proficiencyLevel}
-                  </p>
-                  <p className="text-gray-600">
+                  <div className="flex text-gray-600 font-semibold items-center gap-2">
+                    <FaGraduationCap />
+                    Nível de Proficiência:{" "}
+                    <span className="font-normal text-gray-600">
+                      {student.proficiencyLevel}
+                    </span>
+                  </div>
+                  <div className="text-gray-600 font-semibold flex items-center gap-2">
+                    <FaCalendar />
                     Criado em:{" "}
-                    {new Date(student.createdAt).toLocaleDateString()}
-                  </p>
+                    <span className="font-normal text-gray-600">
+                      {new Date(student.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
-            
           </div>
-        </div>}
-        {
-          selectedStudent && (
-           <SelectedStudent
-            selectedStudent={selectedStudent}
-            handleReturn={() => {
-              setSelectedStudent(null);
-            }}
-           />
-          )
-        }
-      </div>
+        </div>
+      )}
+      {selectedStudent && (
+        <SelectedStudent
+          selectedStudent={selectedStudent}
+          handleReturn={() => {
+            setSelectedStudent(null);
+          }}
+        />
+      )}
     </div>
   );
 };
