@@ -1,28 +1,38 @@
-import { FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import api from "../../../config/axios";
 import { Student } from "./types";
-
-const notes = [
-  {
-    title: "Anotações do Professor",
-    content: "Estudante muito dedicado, sempre participa das aulas.",
-  },
-  {
-    title: "Anotações do Professor",
-    content: "Estudante muito dedicado, sempre participa das aulas.",
-  },
-  {
-    title: "Anotações do Professor",
-    content: "Estudante muito dedicado, sempre participa das aulas.",
-  },
-  {
-    title: "Anotações do Professor",
-    content: "Estudante muito dedicado, sempre participa das aulas.",
-  },
-];
 
 const StudentNotes = (
   { student }: { student: Student } // Adjust type as needed
 ) => {
+  const [notes, setNotes] = useState<
+    {
+      title: string;
+      content: string;
+      createAt: Date;
+    }[]
+  >([]);
+  const [loading, setLoading] = useState(false);
+  const [inputError, setInputError] = useState(false);
+
+  const fetchNotes = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/notes/" + student.id);
+      const data = response.data;
+      setNotes(data);
+    } catch {
+      toast.error("Erro ao buscar anotações do estudante.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, [student]);
+
   const toggleCreateNoteModal = () => {
     const modal = document.getElementById(
       "create_note_modal"
@@ -35,9 +45,26 @@ const StudentNotes = (
     modal.showModal();
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
+    const formData = new FormData(e.currentTarget);
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    if (!title || !content) {
+      setInputError(true);
+      return;
+    }
+    try {
+      await api.post("/notes/" + student.id, {
+        title,
+        content,
+      });
+      fetchNotes();
+    } catch (error: any) {
+      toast.error(error.response.data.message || "Erro ao criar anotação.");
+      return;
+    }
+
     toggleCreateNoteModal();
   };
 
@@ -57,7 +84,11 @@ const StudentNotes = (
       </div>
 
       <div className="space-y-4">
-        {notes.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        ) : notes.length > 0 ? (
           notes.map((note, index) => (
             <div
               key={index}
@@ -71,7 +102,10 @@ const StudentNotes = (
           <p className="text-gray-500">Nenhuma anotação disponível.</p>
         )}
       </div>
-      <StudentNoteCreateModal handleSubmit={handleSubmit} />
+      <StudentNoteCreateModal
+        handleSubmit={handleSubmit}
+        inputError={inputError}
+      />
     </div>
   );
 };
@@ -79,8 +113,10 @@ const StudentNotes = (
 export default StudentNotes;
 
 const StudentNoteCreateModal = ({
+  inputError,
   handleSubmit,
 }: {
+  inputError: boolean;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void; // Adjust type as needed
 }) => {
   return (
@@ -94,6 +130,7 @@ const StudentNoteCreateModal = ({
             </label>
             <input
               type="text"
+              name="title"
               placeholder="Ex: Observações sobre o desempenho"
               className="input input-bordered w-full"
             />
@@ -103,6 +140,7 @@ const StudentNoteCreateModal = ({
               <span className="label-text">Conteúdo</span>
             </label>
             <textarea
+              name="content"
               placeholder="Descreva a anotação aqui..."
               className="textarea textarea-bordered w-full"
             ></textarea>
@@ -110,6 +148,11 @@ const StudentNoteCreateModal = ({
           <button type="submit" className="btn bg-black text-white w-full">
             Salvar Anotação
           </button>
+          {inputError && (
+            <span className="text-red-500 text-sm">
+              Por favor, preencha todos os campos.
+            </span>
+          )}
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
