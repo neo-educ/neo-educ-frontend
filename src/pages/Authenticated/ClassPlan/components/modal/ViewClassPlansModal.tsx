@@ -1,5 +1,5 @@
-import React from 'react';
 import { X } from 'lucide-react';
+import React from 'react';
 import { ClassPlan } from '../../types';
 
 interface ViewClassPlanModalProps {
@@ -26,7 +26,7 @@ const ViewClassPlanModal: React.FC<ViewClassPlanModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-300/40 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-[80%] flex flex-col max-h-[90vh]">
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
           <h2 className="text-2xl font-semibold text-gray-900">Detalhes da aula</h2>

@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
-import { Sparkles, BookOpen, GraduationCap, Heart, Loader2, FileText, MessageCircle, Hash } from "lucide-react";
+import { BookOpen, FileText, GraduationCap, Hash, Heart, Loader2, MessageCircle, Sparkles } from "lucide-react";
 import { useState } from "react";
-import GeneratedSentences from "./components/GeneratedSentences";
+import { generateExercises, generateMaterial } from "../../../services/materialGenerationApi";
 import GeneratedExercises from "./components/GeneratedExercises";
-import { generateMaterial, generateExercises } from "../../../services/materialGenerationApi";
+import GeneratedSentences from "./components/GeneratedSentences";
 
 interface MaterialGenerationFormData {
   topic: string;
@@ -169,14 +169,14 @@ export function PageMaterialGeneration() {
             <div className="flex flex-col gap-1">
               <label htmlFor="interests" className="flex gap-2 items-center text-center">
                 <Heart size={24} color="#FF7A00"/>
-                <span className="text-black text-lg font-sans">Interesses</span>
+                <span className="text-black text-lg font-sans">Temas</span>
               </label>
 
               <textarea
                 id="interests"
                 name="interests"
                 className="p-3 border border-gray-300 rounded-md hover:border-[#FF7A00] focus:border-[#FF7A00] focus:outline-none w-full font-sans text-base min-h-[100px] resize-y"
-                placeholder="Insira os interesses separados por vírgula. Exemplo: viagem, tecnologia, esportes, etc."
+                placeholder="Insira os temas separados por vírgula. Exemplo: viagem, tecnologia, esportes, etc."
                 required
               />
             </div>

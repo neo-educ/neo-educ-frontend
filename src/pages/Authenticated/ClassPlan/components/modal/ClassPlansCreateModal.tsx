@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { ptBR } from "date-fns/locale";
 import { X } from "lucide-react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ClassPlanCreate } from "../../types";
-import { ptBR } from "date-fns/locale";
 
 interface CreateClassPlanModalProps {
   isOpen: boolean;
@@ -34,7 +34,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-300/40 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-full max-w-md p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-900">
@@ -60,7 +60,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
               type="text"
               id="topic"
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
               value={formData.topic}
               onChange={(e) =>
                 setFormData({ ...formData, topic: e.target.value })
@@ -83,7 +83,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
               showTimeSelect
               dateFormat="Pp"
               locale={ptBR}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
             />
           </div>
 
@@ -99,7 +99,7 @@ const CreateClassPlanModal: React.FC<CreateClassPlanModalProps> = ({
               placeholder="Digite o tópico referente ao assunto da aula"
               required
               rows={4}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
               value={formData.inputData}
               onChange={(e) =>
                 setFormData({ ...formData, inputData: e.target.value })

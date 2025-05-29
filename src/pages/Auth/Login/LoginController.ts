@@ -30,9 +30,8 @@ export const useLoginController = () => {
         toast.error(error.response?.data?.message || "Erro ao fazer login");
       } else {
         toast.error("Erro ao fazer login");
+        setLoading(false)
       }
-    } finally {
-      setLoading(false);
     }
   };
   return {

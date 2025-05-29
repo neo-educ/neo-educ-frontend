@@ -66,7 +66,7 @@ const Login = () => {
           disabled={loading}
         >
           {loading ? 
-          <span className="loading loading-spinner"></span>
+          <span className="loading loading-spinner text-black"></span>
           : "Login"}
         </button>
       </form>
