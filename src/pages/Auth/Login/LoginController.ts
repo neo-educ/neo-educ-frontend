@@ -7,7 +7,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 export const useLoginController = () => {
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
-  const onSubmit = async (data: { email: string; password: string }) => {
+  const onSubmit = async (data: { email: string; password: string }, retryCount = 0) => {
     try {
       setLoading(true);
       const response = await api.post("auth/login", data);
@@ -23,6 +23,10 @@ export const useLoginController = () => {
       });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
+        if (error.response?.status === 401 && retryCount < 1) {
+          // Retry once
+          return onSubmit(data, retryCount + 1);
+        }
         toast.error(error.response?.data?.message || "Erro ao fazer login");
       } else {
         toast.error("Erro ao fazer login");
